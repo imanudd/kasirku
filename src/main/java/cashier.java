@@ -31,7 +31,7 @@ public class cashier extends javax.swing.JFrame {
     ResultSet rs;
     HashMap<String,String> cashier = new HashMap<String,String>();
     repository.cashier repo = new repository.cashier();
-    
+
     private void connect(){
         conn = repository.config.initDB();
     }
