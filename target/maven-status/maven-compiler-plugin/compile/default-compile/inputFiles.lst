@@ -1,6 +1,14 @@
+<<<<<<< HEAD
 C:\Users\imanudd\Documents\Kuliah\Pemrograman\Kasirku\src\main\java\kasir.java
 C:\Users\imanudd\Documents\Kuliah\Pemrograman\Kasirku\src\main\java\repositories\connection.java
 C:\Users\imanudd\Documents\Kuliah\Pemrograman\Kasirku\src\main\java\transaksi.java
 C:\Users\imanudd\Documents\Kuliah\Pemrograman\Kasirku\src\main\java\home.java
 C:\Users\imanudd\Documents\Kuliah\Pemrograman\Kasirku\src\main\java\repositories\kasir.java
 C:\Users\imanudd\Documents\Kuliah\Pemrograman\Kasirku\src\main\java\user.java
+=======
+C:\Users\imanudd\Documents\Kuliah\Pemrograman\Kasirku\src\main\java\repository\config.java
+C:\Users\imanudd\Documents\Kuliah\Pemrograman\Kasirku\src\main\java\cashier.java
+C:\Users\imanudd\Documents\Kuliah\Pemrograman\Kasirku\src\main\java\repository\cashier.java
+C:\Users\imanudd\Documents\Kuliah\Pemrograman\Kasirku\src\main\java\home.java
+C:\Users\imanudd\Documents\Kuliah\Pemrograman\Kasirku\src\main\java\repository\constant.java
+>>>>>>> c99fd732aa254643840748fa797837b7540a159d

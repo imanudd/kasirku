@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 kasir$5.class
 kasir$3.class
 kasir$7.class
@@ -19,3 +20,27 @@ home.class
 kasir$10.class
 home$3.class
 kasir.class
+=======
+cashier$4.class
+repository\constant.class
+cashier$12.class
+repository\config.class
+cashier$11.class
+home$5.class
+cashier$2.class
+cashier$3.class
+cashier.class
+home$1.class
+cashier$7.class
+cashier$1.class
+cashier$6.class
+home$4.class
+home.class
+cashier$10.class
+repository\cashier.class
+cashier$8.class
+home$2.class
+cashier$5.class
+home$3.class
+cashier$9.class
+>>>>>>> c99fd732aa254643840748fa797837b7540a159d
