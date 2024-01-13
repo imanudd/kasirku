@@ -18,50 +18,96 @@ public class cashier extends javax.swing.JFrame {
     public cashier() {
         initComponents();
         connect();
-
-        try {
-            fetch();
-        }catch (Exception e){
-            System.out.println(e.getMessage());
-        }
+        fetch();
     }
 
     Connection conn;
     PreparedStatement pst;
     ResultSet rs;
-    HashMap<String,String> cashier = new HashMap<String,String>();
     repository.cashier repo = new repository.cashier();
 
     private void connect(){
         conn = repository.config.initDB();
     }
     
-    private void fetch() throws Exception{
+    private void fetch(){
         rs = repo.get(conn);
 
-        int q = rs.getMetaData().getColumnCount();
+        int q = 0;
+        try {
+            q = rs.getMetaData().getColumnCount();DefaultTableModel df = (DefaultTableModel)tableKasir.getModel();
+            df.setRowCount(0);
 
-        DefaultTableModel df = (DefaultTableModel)tableKasir.getModel();
-        df.setRowCount(0);
-
-        while(rs.next()){
-            Vector v2 = new Vector();
-            for (int i = 1; i<=q; i++){
-                v2.add(rs.getString(1));
-                v2.add(rs.getString(2));
-                v2.add(rs.getString(3));
-                v2.add(rs.getString(4));
+            while(rs.next()){
+                Vector v2 = new Vector();
+                for (int i = 1; i<=q; i++){
+                    v2.add(rs.getString(1));
+                    v2.add(rs.getString(2));
+                    v2.add(rs.getString(3));
+                    v2.add(rs.getString(4));
+                }
+                df.addRow(v2);
             }
-            df.addRow(v2);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
+
+    }
+    private dto.cashier initData(){
+        if (labelID.getText().contains("")){
+            labelID.setText("0");
+        }
+
+        dto.cashier cashier = new dto.cashier(
+                Integer.parseInt(labelID.getText()),
+                txtName.getText(),
+                txtPhone.getText(),
+                txtAddress.getText()
+        );
+
+    return cashier;
+    }
+    private void insertNewCashier(){
+        boolean success = repo.insert(conn,initData());
+
+        if (!success){
+            JOptionPane.showMessageDialog(null, "failed adding data");
+            return;
+        }
+
+        JOptionPane.showMessageDialog(null, "success adding data");
     }
 
-    private HashMap<String,String> getCashier(){
-        cashier.put("name",txtName.getText());
-        cashier.put("phoneNumber",txtPhone.getText());
-        cashier.put("address",txtAddress.getText());
+    private void updateCashier(){
+        if (labelID.getText().isEmpty()){
+            JOptionPane.showMessageDialog(null, "please select data on table list");
+            return;
+        }
+        boolean status = repo.update(conn,initData());
 
-        return cashier;
+        if(!status){
+            JOptionPane.showMessageDialog(null, "failed update data");
+            return;
+        }
+
+        JOptionPane.showMessageDialog(null, "success update data");
+    }
+
+    private void deleteCashier(){
+        if (labelID.getText().isEmpty()){
+            JOptionPane.showMessageDialog(null, "Please select data on table list");
+            return;
+        }
+
+        int id = Integer.parseInt(labelID.getText());
+        boolean status = repo.delete(conn,id);
+
+        if(!status){
+            JOptionPane.showMessageDialog(null, "failed delete data");
+            return;
+        }
+
+        JOptionPane.showMessageDialog(null, "success delete data");
     }
 
     public void clear(){
@@ -103,6 +149,7 @@ public class cashier extends javax.swing.JFrame {
 
         jPanel1.setBackground(new java.awt.Color(0, 0, 0));
         jPanel1.setPreferredSize(new java.awt.Dimension(676, 451));
+        jPanel1.setLayout(null);
 
         tableKasir.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -135,59 +182,66 @@ public class cashier extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(tableKasir);
 
+        jPanel1.add(jScrollPane1);
+        jScrollPane1.setBounds(372, 6, 282, 402);
+
         txtPhone.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtPhoneActionPerformed(evt);
             }
         });
+        jPanel1.add(txtPhone);
+        txtPhone.setBounds(140, 224, 205, 22);
 
         txtAddress.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtAddressActionPerformed(evt);
             }
         });
+        jPanel1.add(txtAddress);
+        txtAddress.setBounds(140, 264, 205, 22);
 
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setText("Nama ");
+        jPanel1.add(jLabel1);
+        jLabel1.setBounds(70, 184, 35, 16);
 
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
         jLabel2.setText("No Telp");
+        jPanel1.add(jLabel2);
+        jLabel2.setBounds(70, 227, 41, 16);
 
         jLabel3.setForeground(new java.awt.Color(255, 255, 255));
         jLabel3.setText("Alamat");
+        jPanel1.add(jLabel3);
+        jLabel3.setBounds(70, 267, 37, 16);
 
         btnInsert.setText("Insert");
         btnInsert.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                try {
-                    btnInsertActionPerformed(evt);
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
-                }
+                btnInsertActionPerformed(evt);
             }
         });
+        jPanel1.add(btnInsert);
+        btnInsert.setBounds(273, 298, 72, 23);
 
         btnDelete.setText("Delete");
         btnDelete.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                try {
-                    btnDeleteActionPerformed(evt);
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
-                }
+                btnDeleteActionPerformed(evt);
             }
         });
+        jPanel1.add(btnDelete);
+        btnDelete.setBounds(273, 327, 72, 23);
 
         btnUpdate.setText("Update");
         btnUpdate.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                try {
-                    btnUpdateActionPerformed(evt);
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
-                }
+                btnUpdateActionPerformed(evt);
             }
         });
+        jPanel1.add(btnUpdate);
+        btnUpdate.setBounds(273, 356, 72, 23);
 
         btnGet.setText("Get Data >>");
         btnGet.addActionListener(new java.awt.event.ActionListener() {
@@ -195,6 +249,8 @@ public class cashier extends javax.swing.JFrame {
                 btnGetActionPerformed(evt);
             }
         });
+        jPanel1.add(btnGet);
+        btnGet.setBounds(250, 120, 95, 23);
 
         btnBack.setText("Back");
         btnBack.addActionListener(new java.awt.event.ActionListener() {
@@ -202,100 +258,31 @@ public class cashier extends javax.swing.JFrame {
                 btnBackActionPerformed(evt);
             }
         });
+        jPanel1.add(btnBack);
+        btnBack.setBounds(6, 407, 63, 38);
 
         jLabel4.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         jLabel4.setForeground(new java.awt.Color(255, 255, 255));
         jLabel4.setText("Daftar Kasir");
+        jPanel1.add(jLabel4);
+        jLabel4.setBounds(6, 6, 215, 40);
 
         jLabel5.setForeground(new java.awt.Color(255, 255, 255));
         jLabel5.setText("Id");
+        jPanel1.add(jLabel5);
+        jLabel5.setBounds(70, 156, 11, 16);
 
         txtName.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtNameActionPerformed(evt);
             }
         });
+        jPanel1.add(txtName);
+        txtName.setBounds(140, 184, 205, 22);
 
         labelID.setForeground(new java.awt.Color(255, 255, 255));
-
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(btnDelete)
-                                .addComponent(btnInsert)
-                                .addComponent(btnUpdate))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addGroup(jPanel1Layout.createSequentialGroup()
-                                    .addComponent(jLabel3)
-                                    .addGap(33, 33, 33)
-                                    .addComponent(txtAddress, javax.swing.GroupLayout.PREFERRED_SIZE, 205, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGroup(jPanel1Layout.createSequentialGroup()
-                                    .addComponent(jLabel2)
-                                    .addGap(29, 29, 29)
-                                    .addComponent(txtPhone, javax.swing.GroupLayout.PREFERRED_SIZE, 205, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(jLabel5)
-                                        .addComponent(jLabel1))
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(txtName, javax.swing.GroupLayout.PREFERRED_SIZE, 205, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addComponent(btnGet, javax.swing.GroupLayout.Alignment.TRAILING))
-                        .addGap(27, 27, 27))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(labelID, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 215, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnBack, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 151, Short.MAX_VALUE)))
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 282, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(22, 22, 22))
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnGet)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel5)
-                            .addComponent(labelID, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(12, 12, 12)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel1)
-                            .addComponent(txtName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(txtPhone, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel2))
-                        .addGap(18, 18, 18)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(txtAddress, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel3))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(btnInsert)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnDelete)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnUpdate)
-                        .addGap(28, 28, 28)
-                        .addComponent(btnBack, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 12, Short.MAX_VALUE)))
-                .addContainerGap())
-        );
+        jPanel1.add(labelID);
+        labelID.setBounds(140, 156, 81, 16);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -323,55 +310,24 @@ public class cashier extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtAddressActionPerformed
 
-    private void btnInsertActionPerformed(java.awt.event.ActionEvent evt)throws Exception  {//GEN-FIRST:event_btnInsertActionPerformed
-        boolean success = repo.insert(conn,getCashier());
-
-        if (!success){
-            JOptionPane.showMessageDialog(null, "failed adding data");
-            return;
-        }
-
-        JOptionPane.showMessageDialog(null, "success adding data");
+    private void btnInsertActionPerformed(java.awt.event.ActionEvent evt){//GEN-FIRST:event_btnInsertActionPerformed
+        insertNewCashier();
         fetch();
         clear();
     }//GEN-LAST:event_btnInsertActionPerformed
 
 
 
-    private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt)throws Exception {//GEN-FIRST:event_btnDeleteActionPerformed
-        if (labelID.getText().isEmpty()){
-            JOptionPane.showMessageDialog(null, "Please select data on table list");
-            return;
-        }
-
-        int id = Integer.parseInt(labelID.getText());
-        boolean status = repo.delete(conn,id);
-
-        if(!status){
-            JOptionPane.showMessageDialog(null, "failed delete data");
-            return;
-        }
-
-        JOptionPane.showMessageDialog(null, "success delete data");
+    private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
+        deleteCashier();
         clear();
         fetch();
+
+
     }//GEN-LAST:event_btnDeleteActionPerformed
 
-    private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt)throws Exception {//GEN-FIRST:event_btnUpdateActionPerformed
-        if (labelID.getText().isEmpty()){
-            JOptionPane.showMessageDialog(null, "please select data on table list");
-            return;
-        }
-
-        int id = Integer.parseInt(labelID.getText());
-        boolean status = repo.update(conn,getCashier(),id);
-
-        if(!status){
-            JOptionPane.showMessageDialog(null, "failed update data");
-            return;
-        }
-
-        JOptionPane.showMessageDialog(null, "success update data");
+    private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt){//GEN-FIRST:event_btnUpdateActionPerformed
+        updateCashier();
         clear();
         fetch();
     }//GEN-LAST:event_btnUpdateActionPerformed
@@ -382,11 +338,7 @@ public class cashier extends javax.swing.JFrame {
     }//GEN-LAST:event_btnBackActionPerformed
 
     private void btnGetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGetActionPerformed
-        try {
-            fetch();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+       fetch();
     }//GEN-LAST:event_btnGetActionPerformed
 
     private void tableKasirPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_tableKasirPropertyChange

@@ -17,43 +17,60 @@ public class cashier {
     PreparedStatement pst;
     Statement statement;
     ResultSet rs;
+    int state;
 
-    public ResultSet get(Connection conn) throws SQLException {
-        pst = conn.prepareStatement(constant.SELECT_ALL_CASHIERS);
-        rs = pst.executeQuery();
+    dto.cashier cashierObj;
 
-        return rs;
+    public ResultSet get(Connection conn) {
+        try {
+            pst = conn.prepareStatement(constant.SELECT_ALL_CASHIERS);
+            return  pst.executeQuery();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+//    HashMap<String,String> cashier
+    public boolean insert(Connection conn, dto.cashier cashier) {
+        try {
+            pst = conn.prepareStatement(constant.INSERT_NEW_CASHIER);
+            pst.setString(1,cashier.name);
+            pst.setString(2, cashier.phoneNumber);
+            pst.setString(3, cashier.address);
+
+            state = pst.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+
+        return (state==1);
     }
 
-    public boolean insert(Connection conn, HashMap<String,String> cashier)throws SQLException {
-        pst = conn.prepareStatement(constant.INSERT_NEW_CASHIER);
-        pst.setString(1,cashier.get("name"));
-        pst.setString(2, cashier.get("phoneNumber"));
-        pst.setString(3, cashier.get("address"));
+    public boolean delete(Connection conn, Integer id){
+        try {
+            pst = conn.prepareStatement(constant.DELETE_CASHIER);
+            pst.setInt(1,id);
+            state = pst.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
 
-        int status = pst.executeUpdate();
-
-        return (status==1);
+        return (state==1);
     }
 
-    public boolean delete(Connection conn, Integer id)throws SQLException{
-        pst = conn.prepareStatement(constant.DELETE_CASHIER);
-        pst.setInt(1,id);
+    public boolean update(Connection conn, dto.cashier cashier){
+        try {
+            pst = conn.prepareStatement(constant.UPDATE_CASHIER);
+            pst.setString(1,cashier.name);
+            pst.setString(2, cashier.phoneNumber);
+            pst.setString(3, cashier.address);
+            pst.setInt(4,cashier.id);
 
-        int status = pst.executeUpdate();
+            state = pst.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
 
-        return (status==1);
-    }
-
-    public boolean update(Connection conn, HashMap<String,String> cashier, int id) throws SQLException{
-        pst = conn.prepareStatement(constant.UPDATE_CASHIER);
-        pst.setString(1,cashier.get("name"));
-        pst.setString(2, cashier.get("phoneNumber"));
-        pst.setString(3, cashier.get("address"));
-        pst.setInt(4,id);
-
-        int status = pst.executeUpdate();
-
-        return (status==1);
+        return (state==1);
     }
 }

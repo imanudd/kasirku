@@ -198,8 +198,6 @@ public class transaction extends javax.swing.JFrame {
         Object qty = table_transaction.getValueAt(selectedTableRow,3);
         Object price = table_transaction.getValueAt(selectedTableRow,4);
 
-        System.out.println(qty);
-
         Boolean status = repoTransaction.deleteTransaction(
                 conn,
                 ((Number) detailTrxID).intValue()
@@ -473,6 +471,11 @@ public class transaction extends javax.swing.JFrame {
         btn_add.setBounds(390, 350, 100, 23);
 
         btn_update.setText("update");
+        btn_update.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_updateActionPerformed(evt);
+            }
+        });
         jPanel1.add(btn_update);
         btn_update.setBounds(540, 350, 100, 23);
 
@@ -613,6 +616,9 @@ public class transaction extends javax.swing.JFrame {
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Please show your data transaction");
         }
+
+        cb_cashier.setEnabled(false);
+       
     }//GEN-LAST:event_btn_addActionPerformed
 
     private void cb_qtyMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cb_qtyMouseEntered
@@ -692,8 +698,8 @@ public class transaction extends javax.swing.JFrame {
     }//GEN-LAST:event_cb_itemsMouseMoved
 
     private void table_transactionMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_table_transactionMouseClicked
-
-
+        cb_items.setEnabled(false);
+        cb_category.setEnabled(false);
     }//GEN-LAST:event_table_transactionMouseClicked
 
     private void btn_deleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_deleteActionPerformed
@@ -708,7 +714,12 @@ public class transaction extends javax.swing.JFrame {
         }
 
         df.removeRow(selectedTableRow);
+        cb_items.setEnabled(true);
+        cb_category.setEnabled(true);
     }//GEN-LAST:event_btn_deleteActionPerformed
+
+    private void btn_updateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_updateActionPerformed
+    }//GEN-LAST:event_btn_updateActionPerformed
 
     /**
      * @param args the command line arguments

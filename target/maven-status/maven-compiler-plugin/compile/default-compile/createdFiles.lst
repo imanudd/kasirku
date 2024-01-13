@@ -17,6 +17,7 @@ home$4.class
 cashier$10.class
 repository\cashier.class
 home$2.class
+transaction$15.class
 transaction$6.class
 cashier$9.class
 cashier$4.class
@@ -38,5 +39,6 @@ cashier$5.class
 transaction$11.class
 dto\cashier.class
 transaction$2.class
+transaction$16.class
 home$3.class
 repository\category.class
