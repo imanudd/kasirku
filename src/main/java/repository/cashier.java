@@ -24,7 +24,7 @@ public class cashier {
     public ResultSet get(Connection conn) {
         try {
             pst = conn.prepareStatement(constant.SELECT_ALL_CASHIERS);
-            return  pst.executeQuery();
+            return pst.executeQuery();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -59,18 +59,21 @@ public class cashier {
     }
 
     public boolean update(Connection conn, dto.cashier cashier){
+        System.out.println(cashier.getId());
         try {
             pst = conn.prepareStatement(constant.UPDATE_CASHIER);
-            pst.setString(1,cashier.name);
-            pst.setString(2, cashier.phoneNumber);
-            pst.setString(3, cashier.address);
-            pst.setInt(4,cashier.id);
+            pst.setString(1,cashier.getName());
+            pst.setString(2, cashier.getPhoneNumber());
+            pst.setString(3, cashier.getAddress());
+            pst.setInt(4,cashier.getId());
 
             state = pst.executeUpdate();
+            return (state==1);
         } catch (SQLException e) {
+            System.out.println(e.getMessage());
             throw new RuntimeException(e);
         }
 
-        return (state==1);
+
     }
 }

@@ -24,14 +24,19 @@ public class transaction {
         return (status==1);
     }
 
-    public Boolean updateGrandTotal(Connection conn, Integer trxID, Integer grandTotal) throws Exception{
-        pst = conn.prepareStatement(constant.UPDATE_GRAND_TOTAL);
-        pst.setInt(1,grandTotal);
-        pst.setInt(2,trxID);
+    public Boolean updateGrandTotal(Connection conn, Integer trxID, Integer grandTotal) {
+        try {
+            pst = conn.prepareStatement(constant.UPDATE_GRAND_TOTAL);
+            pst.setInt(1,grandTotal);
+            pst.setInt(2,trxID);
 
-        int status = pst.executeUpdate();
+            int status = pst.executeUpdate();
 
-        return (status == 1);
+            return (status == 1);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
     }
 
     public boolean upsertTransaction(Connection conn,HashMap<String,Integer> transaction) throws Exception{
@@ -51,12 +56,14 @@ public class transaction {
         return (status==1);
     }
 
-    public ResultSet getDetailTransaction(Connection conn, int transactionID) throws SQLException {
-        pst = conn.prepareStatement(constant.GET_DETAIL_TRANSACTION);
-        pst.setInt(1,transactionID);
-        rs = pst.executeQuery();
-
-        return rs;
+    public ResultSet getDetailTransaction(Connection conn, int transactionID) {
+        try {
+            pst = conn.prepareStatement(constant.GET_DETAIL_TRANSACTION);
+            pst.setInt(1,transactionID);
+            return  pst.executeQuery();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public Boolean deleteTransaction(Connection conn,Integer id)throws Exception{
@@ -74,5 +81,29 @@ public class transaction {
         rs = pst.executeQuery();
 
         return rs;
+    }
+
+    public Boolean updateTransactionQTY(Connection conn,HashMap<String,String> trx){
+        System.out.println(trx);
+        try {
+            pst = conn.prepareStatement(constant.TRANSACTION_UPDATE);
+            pst.setInt(1,Integer.parseInt(trx.get("qtyTrx")));
+            pst.setInt(2,Integer.parseInt(trx.get("totalPrice")));
+            pst.setInt(3,Integer.parseInt(trx.get("idDetailTrx")));
+            pst.setString(4, trx.get("operandtrx"));
+            pst.setInt(5, Integer.parseInt(trx.get("totalPrice")));
+            pst.setInt(6,Integer.parseInt(trx.get("idTrx")));
+            pst.setString(7, trx.get("operandProduct"));
+            pst.setInt(8,Integer.parseInt(trx.get("qtyProduct")));
+            pst.setInt(9,Integer.parseInt(trx.get("idProduct")));
+
+
+
+            int status = pst.executeUpdate();
+            System.out.println(pst.toString());
+            return (status==1);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

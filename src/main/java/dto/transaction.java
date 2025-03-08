@@ -1,7 +1,7 @@
 package dto;
 
 public class transaction {
-    String Cashier;
+    public String Cashier;
     String ProductName;
 
     public transaction(String cashier, String productName){

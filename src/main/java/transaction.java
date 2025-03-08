@@ -38,8 +38,10 @@ public class transaction extends javax.swing.JFrame {
     int selectedTableRow;
     public transaction() {
         initComponents();
+        btn_struck.setEnabled(false);
         connect();
         initCategory();
+        btn_update.setEnabled(false);
 
         int generateID = generateID();
         txt_transaction_id.setText(String.valueOf(generateID));
@@ -209,10 +211,6 @@ public class transaction extends javax.swing.JFrame {
                 grandTotal-((Number) price).intValue()
         );
 
-        Object obj = qty;
-        String typeName = obj.getClass().getTypeName();
-        System.out.println("Tipe data obj: " + typeName);
-
        status = repoProduct.updateReturnStock(
                 conn,
                 Integer.parseInt(productID.toString()),
@@ -270,6 +268,66 @@ public class transaction extends javax.swing.JFrame {
         }
     }
 
+//    private void updateTransaction(){
+//        HashMap <String,String> mTrx = new HashMap<>();
+//        int lastQty = 0;
+//        int grandTotal = unFormatCurrency(txt_grand_total.getText());
+//
+//        mTrx.put("qtyTrx",cb_qty.getSelectedItem().toString());
+//        mTrx.put("totalPrice",String.valueOf(unFormatCurrency(txt_total_items.getText())));
+//        mTrx.put("idDetailTrx", table_transaction.getModel().getValueAt(selectedTableRow,0).toString());
+//        mTrx.put("idTrx",txt_transaction_id.getText());
+//        mTrx.put("operandTrx", "+");
+//        mTrx.put("operandProduct" ,"-");
+//        mTrx.put("idProduct",table_transaction.getModel().getValueAt(selectedTableRow,1).toString());
+//
+//        rs = repoTransaction.getDetailTransaction(conn, Integer.parseInt(txt_transaction_id.getText()));
+//            try {
+//                while (rs.next()) {
+//                    lastQty = rs.getInt("total");
+//                }
+//            } catch (SQLException e) {
+//                throw new RuntimeException(e);
+//            }
+//            int newQty = Integer.parseInt(cb_qty.getSelectedItem().toString());
+//
+//            Boolean isIncrement = lastQty < newQty;
+//            if (!isIncrement){
+//                mTrx.put("operandTrx", "-");
+//                mTrx.put("operandProduct" ,"+");
+//                mTrx.put("qtyProduct",cb_qty.getSelectedItem().toString());
+//
+//                Boolean status = repoTransaction.update
+//
+//                Boolean status = repoTransaction.updateTransactionQTY(conn,mTrx);
+//                if (!status){
+//                    JOptionPane.showMessageDialog(null,"Error when update transaction");
+//                    return;
+//                }
+//                JOptionPane.showMessageDialog(null,"success when update transaction");
+//
+//                int finalGrandTotal = grandTotal - Integer.parseInt(txt_total_items.getText());
+//                txt_grand_total.setText(formatCurrency(finalGrandTotal));
+//
+//                return;
+//            }
+//
+//            int finalQty = newQty - lastQty;
+//
+//            mTrx.put("operandTrx", "+");
+//            mTrx.put("operandProduct", "-");
+//            mTrx.put("qtyProduct", String.valueOf(finalQty));
+//            Boolean status = repoTransaction.updateTransactionQTY(conn,mTrx);
+//                if (!status){
+//                    JOptionPane.showMessageDialog(null,"Error when update transaction");
+//                    return;
+//                }
+//                    JOptionPane.showMessageDialog(null,"success when update transaction");
+//
+//        int finalGrandTotal = grandTotal + ((Integer.parseInt(txt_total_items.getText())/newQty) * finalQty);
+//        txt_grand_total.setText(formatCurrency(finalGrandTotal));
+//    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -282,6 +340,13 @@ public class transaction extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
         jPopupMenu1 = new javax.swing.JPopupMenu();
+        jPanel2 = new javax.swing.JPanel();
+        jLabel11 = new javax.swing.JLabel();
+        jLabel12 = new javax.swing.JLabel();
+        cashier = new javax.swing.JButton();
+        transaction = new javax.swing.JButton();
+        inventory = new javax.swing.JButton();
+        supplier = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
@@ -294,7 +359,6 @@ public class transaction extends javax.swing.JFrame {
         cb_items = new javax.swing.JComboBox<>();
         jScrollPane2 = new javax.swing.JScrollPane();
         table_transaction = new javax.swing.JTable();
-        jLabel8 = new javax.swing.JLabel();
         btn_add = new javax.swing.JButton();
         btn_update = new javax.swing.JButton();
         btn_struck = new javax.swing.JButton();
@@ -308,6 +372,8 @@ public class transaction extends javax.swing.JFrame {
         jLabel10 = new javax.swing.JLabel();
         txt_grand_total = new javax.swing.JLabel();
         btn_delete = new javax.swing.JButton();
+        btn_back = new javax.swing.JButton();
+        jLabel13 = new javax.swing.JLabel();
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -323,48 +389,171 @@ public class transaction extends javax.swing.JFrame {
         jScrollPane1.setViewportView(jTable1);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setPreferredSize(new java.awt.Dimension(1000, 451));
+        setPreferredSize(new java.awt.Dimension(1000, 500));
+        setType(java.awt.Window.Type.UTILITY);
+        getContentPane().setLayout(null);
 
-        jPanel1.setBackground(new java.awt.Color(0, 0, 0));
-        jPanel1.setPreferredSize(new java.awt.Dimension(1000, 451));
+        jPanel2.setBackground(new java.awt.Color(52, 73, 94));
+        jPanel2.setForeground(new java.awt.Color(102, 204, 255));
+        jPanel2.setPreferredSize(new java.awt.Dimension(1000, 100));
+
+        jLabel11.setFont(new java.awt.Font("Segoe UI", 0, 48)); // NOI18N
+        jLabel11.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel11.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        jLabel11.setText("PET");
+        jLabel11.setToolTipText("");
+        jLabel11.setVerticalAlignment(javax.swing.SwingConstants.TOP);
+        jLabel11.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
+        jLabel11.setIconTextGap(20);
+        jLabel11.setMaximumSize(new java.awt.Dimension(100, 16));
+        jLabel11.setPreferredSize(new java.awt.Dimension(100, 100));
+
+        jLabel12.setFont(new java.awt.Font("Segoe UI Light", 0, 36)); // NOI18N
+        jLabel12.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel12.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        jLabel12.setText("STOP");
+        jLabel12.setToolTipText("");
+        jLabel12.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
+        jLabel12.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
+        jLabel12.setIconTextGap(20);
+        jLabel12.setMaximumSize(new java.awt.Dimension(100, 16));
+        jLabel12.setPreferredSize(new java.awt.Dimension(100, 100));
+
+        cashier.setBackground(new java.awt.Color(52, 73, 94));
+        cashier.setFont(new java.awt.Font("Segoe UI Light", 0, 14)); // NOI18N
+        cashier.setForeground(new java.awt.Color(255, 255, 255));
+        cashier.setText("Cashiers");
+        cashier.setBorder(null);
+        cashier.setContentAreaFilled(false);
+        cashier.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                cashierMouseEntered(evt);
+            }
+        });
+        cashier.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cashierActionPerformed(evt);
+            }
+        });
+
+        transaction.setBackground(new java.awt.Color(52, 73, 94));
+        transaction.setFont(new java.awt.Font("Segoe UI Light", 0, 14)); // NOI18N
+        transaction.setForeground(new java.awt.Color(255, 255, 255));
+        transaction.setText("Transactions");
+        transaction.setBorder(null);
+        transaction.setBorderPainted(false);
+        transaction.setContentAreaFilled(false);
+        transaction.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                transactionActionPerformed(evt);
+            }
+        });
+
+        inventory.setBackground(new java.awt.Color(52, 73, 94));
+        inventory.setFont(new java.awt.Font("Segoe UI Light", 0, 14)); // NOI18N
+        inventory.setForeground(new java.awt.Color(255, 255, 255));
+        inventory.setText("Stocks");
+        inventory.setBorder(null);
+        inventory.setContentAreaFilled(false);
+        inventory.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                inventoryActionPerformed(evt);
+            }
+        });
+
+        supplier.setBackground(new java.awt.Color(52, 73, 94));
+        supplier.setFont(new java.awt.Font("Segoe UI Light", 0, 14)); // NOI18N
+        supplier.setForeground(new java.awt.Color(255, 255, 255));
+        supplier.setText("Suppliers");
+        supplier.setBorder(null);
+        supplier.setContentAreaFilled(false);
+        supplier.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                supplierActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(27, 27, 27)
+                .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(cashier, javax.swing.GroupLayout.PREFERRED_SIZE, 169, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(transaction, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(inventory, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(supplier, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(17, Short.MAX_VALUE))
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(17, 17, 17)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(32, 32, 32)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(cashier, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(transaction, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(inventory, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(supplier, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(23, Short.MAX_VALUE))
+        );
+
+        getContentPane().add(jPanel2);
+        jPanel2.setBounds(0, 0, 1000, 100);
+
+        jPanel1.setBackground(new java.awt.Color(149, 165, 166));
+        jPanel1.setPreferredSize(new java.awt.Dimension(1000, 500));
         jPanel1.setLayout(null);
 
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel1.setText("Nama Barang");
+        jLabel1.setText("Product Name");
         jPanel1.add(jLabel1);
-        jLabel1.setBounds(40, 120, 90, 16);
+        jLabel1.setBounds(50, 140, 90, 16);
 
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
         jLabel2.setText("Qty");
         jPanel1.add(jLabel2);
-        jLabel2.setBounds(40, 220, 60, 16);
+        jLabel2.setBounds(250, 80, 60, 16);
 
         txt_total_items.setBackground(new java.awt.Color(204, 255, 255));
         txt_total_items.setForeground(new java.awt.Color(255, 255, 255));
         txt_total_items.setText("0");
         txt_total_items.setPreferredSize(new java.awt.Dimension(10, 10));
         jPanel1.add(txt_total_items);
-        txt_total_items.setBounds(240, 180, 72, 16);
+        txt_total_items.setBounds(140, 210, 72, 16);
 
         jLabel4.setForeground(new java.awt.Color(255, 255, 255));
         jLabel4.setText("Total");
         jPanel1.add(jLabel4);
-        jLabel4.setBounds(140, 250, 50, 16);
+        jLabel4.setBounds(250, 110, 50, 16);
 
         jLabel5.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel5.setText("Harga");
+        jLabel5.setText("Price");
         jPanel1.add(jLabel5);
-        jLabel5.setBounds(140, 180, 70, 16);
+        jLabel5.setBounds(50, 210, 70, 16);
 
         txt_total_price.setForeground(new java.awt.Color(255, 255, 255));
         txt_total_price.setText("0");
         jPanel1.add(txt_total_price);
-        txt_total_price.setBounds(210, 250, 72, 16);
+        txt_total_price.setBounds(310, 110, 72, 16);
 
         jLabel7.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel7.setText("Kategori Barang");
+        jLabel7.setText("Product Category");
         jPanel1.add(jLabel7);
-        jLabel7.setBounds(40, 80, 84, 16);
+        jLabel7.setBounds(50, 80, 130, 16);
 
         cb_category.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
@@ -391,7 +580,7 @@ public class transaction extends javax.swing.JFrame {
             }
         });
         jPanel1.add(cb_category);
-        cb_category.setBounds(140, 80, 180, 22);
+        cb_category.setBounds(50, 100, 180, 22);
 
         cb_items.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
@@ -423,7 +612,7 @@ public class transaction extends javax.swing.JFrame {
             }
         });
         jPanel1.add(cb_items);
-        cb_items.setBounds(140, 120, 180, 22);
+        cb_items.setBounds(50, 160, 180, 22);
 
         table_transaction.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -453,22 +642,16 @@ public class transaction extends javax.swing.JFrame {
         jScrollPane2.setViewportView(table_transaction);
 
         jPanel1.add(jScrollPane2);
-        jScrollPane2.setBounds(390, 50, 560, 270);
+        jScrollPane2.setBounds(450, 40, 500, 240);
 
-        jLabel8.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-        jLabel8.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel8.setText("Transaksi");
-        jPanel1.add(jLabel8);
-        jLabel8.setBounds(475, 0, 215, 40);
-
-        btn_add.setText("Add");
+        btn_add.setText("insert");
         btn_add.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn_addActionPerformed(evt);
             }
         });
         jPanel1.add(btn_add);
-        btn_add.setBounds(390, 350, 100, 23);
+        btn_add.setBounds(240, 210, 170, 23);
 
         btn_update.setText("update");
         btn_update.addActionListener(new java.awt.event.ActionListener() {
@@ -477,16 +660,21 @@ public class transaction extends javax.swing.JFrame {
             }
         });
         jPanel1.add(btn_update);
-        btn_update.setBounds(540, 350, 100, 23);
+        btn_update.setBounds(240, 240, 80, 23);
 
-        btn_struck.setText("Cetak Struck");
+        btn_struck.setText("print invoice");
+        btn_struck.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_struckActionPerformed(evt);
+            }
+        });
         jPanel1.add(btn_struck);
-        btn_struck.setBounds(830, 350, 100, 23);
+        btn_struck.setBounds(240, 290, 170, 23);
 
         jLabel3.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel3.setText("Kasir");
+        jLabel3.setText("Cashier");
         jPanel1.add(jLabel3);
-        jLabel3.setBounds(40, 340, 41, 16);
+        jLabel3.setBounds(50, 240, 41, 16);
 
         cb_cashier.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -502,17 +690,17 @@ public class transaction extends javax.swing.JFrame {
             }
         });
         jPanel1.add(cb_cashier);
-        cb_cashier.setBounds(140, 330, 163, 22);
+        cb_cashier.setBounds(50, 260, 163, 22);
 
         txt_last_stock.setForeground(new java.awt.Color(255, 255, 255));
         txt_last_stock.setText("0");
         jPanel1.add(txt_last_stock);
-        txt_last_stock.setBounds(240, 160, 82, 16);
+        txt_last_stock.setBounds(140, 190, 82, 16);
 
         jLabel9.setForeground(new java.awt.Color(255, 255, 255));
         jLabel9.setText("Total Stock");
         jPanel1.add(jLabel9);
-        jLabel9.setBounds(140, 160, 100, 16);
+        jLabel9.setBounds(50, 190, 100, 16);
 
         cb_qty.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -531,27 +719,27 @@ public class transaction extends javax.swing.JFrame {
             }
         });
         jPanel1.add(cb_qty);
-        cb_qty.setBounds(140, 220, 88, 22);
+        cb_qty.setBounds(310, 80, 88, 22);
 
         jLabel6.setForeground(new java.awt.Color(255, 255, 255));
         jLabel6.setText("Transaksi id : ");
         jPanel1.add(jLabel6);
-        jLabel6.setBounds(10, 10, 90, 16);
+        jLabel6.setBounds(50, 50, 90, 16);
 
         txt_transaction_id.setForeground(new java.awt.Color(255, 255, 255));
         txt_transaction_id.setText("trxid");
         jPanel1.add(txt_transaction_id);
-        txt_transaction_id.setBounds(110, 10, 88, 16);
+        txt_transaction_id.setBounds(130, 50, 88, 16);
 
         jLabel10.setForeground(new java.awt.Color(255, 255, 255));
         jLabel10.setText("Grand Total");
         jPanel1.add(jLabel10);
-        jLabel10.setBounds(40, 290, 61, 16);
+        jLabel10.setBounds(450, 290, 120, 20);
 
         txt_grand_total.setForeground(new java.awt.Color(255, 255, 255));
         txt_grand_total.setText("0");
         jPanel1.add(txt_grand_total);
-        txt_grand_total.setBounds(140, 290, 163, 16);
+        txt_grand_total.setBounds(590, 290, 130, 20);
 
         btn_delete.setText("delete");
         btn_delete.addActionListener(new java.awt.event.ActionListener() {
@@ -560,25 +748,28 @@ public class transaction extends javax.swing.JFrame {
             }
         });
         jPanel1.add(btn_delete);
-        btn_delete.setBounds(680, 350, 100, 23);
+        btn_delete.setBounds(330, 240, 80, 23);
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
+        btn_back.setText("Back");
+        btn_back.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_backActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btn_back);
+        btn_back.setBounds(770, 290, 170, 30);
+
+        jLabel13.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        jLabel13.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel13.setText("Transactions");
+        jPanel1.add(jLabel13);
+        jLabel13.setBounds(30, 0, 215, 40);
+
+        getContentPane().add(jPanel1);
+        jPanel1.setBounds(0, 100, 1000, 620);
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void cb_categoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cb_categoryActionPerformed
@@ -698,6 +889,8 @@ public class transaction extends javax.swing.JFrame {
     }//GEN-LAST:event_cb_itemsMouseMoved
 
     private void table_transactionMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_table_transactionMouseClicked
+        int row = table_transaction.getSelectedRow();
+
         cb_items.setEnabled(false);
         cb_category.setEnabled(false);
     }//GEN-LAST:event_table_transactionMouseClicked
@@ -719,7 +912,44 @@ public class transaction extends javax.swing.JFrame {
     }//GEN-LAST:event_btn_deleteActionPerformed
 
     private void btn_updateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_updateActionPerformed
+//        updateTransaction();
+
     }//GEN-LAST:event_btn_updateActionPerformed
+
+    private void btn_backActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_backActionPerformed
+       home home = new home();
+       home.setVisible(true);
+       
+       this.setVisible(false);
+    }//GEN-LAST:event_btn_backActionPerformed
+
+    private void cashierMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cashierMouseEntered
+
+    }//GEN-LAST:event_cashierMouseEntered
+
+    private void cashierActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cashierActionPerformed
+        this.setVisible(false);
+        new cashier().setVisible(true);
+    }//GEN-LAST:event_cashierActionPerformed
+
+    private void transactionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_transactionActionPerformed
+        this.setVisible(false);
+        new transaction().setVisible(true);
+    }//GEN-LAST:event_transactionActionPerformed
+
+    private void inventoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inventoryActionPerformed
+        product pr = new product();
+        this.setVisible(false);
+    }//GEN-LAST:event_inventoryActionPerformed
+
+    private void supplierActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_supplierActionPerformed
+        this.setVisible(false);
+        new supplier().setVisible(true);
+    }//GEN-LAST:event_supplierActionPerformed
+
+    private void btn_struckActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_struckActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btn_struckActionPerformed
 
     /**
      * @param args the command line arguments
@@ -758,29 +988,37 @@ public class transaction extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btn_add;
+    private javax.swing.JButton btn_back;
     private javax.swing.JButton btn_delete;
     private javax.swing.JButton btn_struck;
     private javax.swing.JButton btn_update;
+    private javax.swing.JButton cashier;
     private javax.swing.JComboBox<String> cb_cashier;
     private javax.swing.JComboBox<String> cb_category;
     private javax.swing.JComboBox<String> cb_items;
     private javax.swing.JComboBox<String> cb_qty;
+    private javax.swing.JButton inventory;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
     private javax.swing.JPopupMenu jPopupMenu1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable jTable1;
+    private javax.swing.JButton supplier;
     private javax.swing.JTable table_transaction;
+    private javax.swing.JButton transaction;
     private javax.swing.JLabel txt_grand_total;
     private javax.swing.JLabel txt_last_stock;
     private javax.swing.JLabel txt_total_items;
